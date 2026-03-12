@@ -17,3 +17,10 @@ function MinhaSegundaFuncao()
         $('#area-02').append(value);
     });
 }
+
+function MinhaTerceiraFuncao()
+{
+ {
+    
+ }
+}
