@@ -1,3 +1,5 @@
+console.log("funcoes.js carregado com sucesso!");
+
 function MinhaPrimeiraFuncao() {
     $('#area-01').css({
         color: '#ff0000',
