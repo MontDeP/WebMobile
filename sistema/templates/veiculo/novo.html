@@ -6,6 +6,15 @@
     <h2> Criar Novo Veiculo </h2>
     <form action = "/veiculo/novo/" method="post" enctype="multipart/form-data">
         {% csrf_token %}
+        {{ form.non_field_errors }}
+
+{% for field in form %}
+    {% for error in field.errors %}
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+    {% endfor %}
+{% endfor %}
         <div class="mb-3">
             <label for="id_marca" class="form-label"> Marca </label>
             {{ form.marca }}
@@ -22,9 +31,9 @@
         </div>
 
         <div class="mb-3">
-            <label for="id_cor" class="form-label"> Cor </label>
-            {{ form.marca }}
-        </div>
+    <label for="id_cor" class="form-label"> Cor </label>
+    {{ form.cor }}
+</div>
 
         <div class="mb-3">
             <label for="id_combustivel" class="form-label"> combustivel </label>
