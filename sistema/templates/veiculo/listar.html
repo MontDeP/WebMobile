@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        {% for veiculo in veiculos %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    {% if veiculo.foto %}
+                        <img src="{{ veiculo.foto.url }}" class="card-img-top" alt="{{ veiculo.modelo }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                        <p>Sem imagem disponível</p>
+                    {% endif %}
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ veiculo.get_marca_display }} {{ veiculo.modelo }}</h5>
+                        <p class="card-text text-muted">
+                            {{ veiculo.ano }} • {{ veiculo.get_cor_display }} • {{ veiculo.get_combustivel_display }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-center">Nenhum veículo cadastrado.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
