@@ -22,6 +22,7 @@ from sistema.views import Login
 urlpatterns = [
     path('', Login.as_view(), name =  "login"),
     path('admin/', admin.site.urls),
-    path('veiculo/', include('veiculo.urls'), name = 'veiculo')
+    path('veiculo/', include('veiculo.urls'), name = 'veiculo'),
+    
 ]
 
