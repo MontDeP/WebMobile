@@ -1,10 +1,10 @@
 from django.http import FileResponse, Http404
-from django.shortcuts import get_object_or_404, render
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, DeleteView, ListView, UpdateView, View
-from veiculo.models import Veiculo
-from veiculo.forms import FormularioVeiculo
+from django.shortcuts import render
+from django.views.generic import ListView, DeleteView, UpdateView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from veiculo.models import Veiculo
+from .forms import FormularioVeiculo
+from django.urls import reverse_lazy
 
 class ListarVeiculos(LoginRequiredMixin, ListView):
     """
@@ -15,48 +15,36 @@ class ListarVeiculos(LoginRequiredMixin, ListView):
     template_name = 'veiculo/listar.html'
 
     def get_queryset(self, **kwargs):
-        pesquisa = self.request.GET.get('pesquisa', None)
+        pesquisa = self.request.GET.get('pesquisa' , None)
         queryset = Veiculo.objects.all()
         if pesquisa is not None:
             queryset = queryset.filter(modelo__icontains=pesquisa)
         return queryset
     
-class CriarVeiculo(LoginRequiredMixin,CreateView):
-    """
-    View para criar um novo veículo.
-    """
+class CriarVeiculos(LoginRequiredMixin, CreateView):
     model = Veiculo
     form_class = FormularioVeiculo
     template_name = 'veiculo/novo.html'
     success_url = reverse_lazy('listar-veiculos')
-
-class EditarVeiculo(LoginRequiredMixin,UpdateView):
-    """
-    View para editar um veículo existente.
-    """
+    
+class EditarVeiculos(UpdateView):
     model = Veiculo
     form_class = FormularioVeiculo
     template_name = 'veiculo/editar.html'
     success_url = reverse_lazy('listar-veiculos')
 
-class FotoVeiculo(LoginRequiredMixin,ListView):
-    """
-    View para exibir a foto de um veículo específico.
-    """
+class FotoVeiculo(ListView):
 
     def get(self, request, arquivo):
-        """
-        Método GET para retornar a foto do veículo.
-        """
         try:
-            veiculo = get_object_or_404(Veiculo, foto=arquivo)
+            veiculo = Veiculo.objects.get(foto='veiculo/fotos/{}'.format(arquivo))
             return FileResponse(veiculo.foto)
         except Veiculo.DoesNotExist:
-            raise Http404("Foto do veículo não encontrada.")
+            raise Http404("Foto não encontrada ou acesso não autorizado")
         except Exception as exception:
             raise exception
         
 class ExcluirVeiculo(LoginRequiredMixin, DeleteView):
     model = Veiculo
-    template_name = 'veiculo/excluir.html' 
+    template_name = 'veiculo/excluir.html'
     success_url = reverse_lazy('listar-veiculos')
