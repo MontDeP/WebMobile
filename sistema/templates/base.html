@@ -5,8 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Sistema{% endblock %}</title>
-    <link type="text/css" rel="stylesheet" href="{% static 'bootstrap-5.3.8-dist/css/bootstrap.css' %}">
-    <script type="text/javascript" src="{% static 'bootstrap-5.3.8-dist/js/bootstrap.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     
 </head>
 <body class="bg-light d-flex flex-column min-vh-100">
@@ -19,7 +18,7 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         {% if user.is_authenticated %}
                             <li class="nav-item">
-                                <a class="nav-link" href="/">
+                                <a class="nav-link" href="{% url 'listar-anuncios' %}">
                                     <i class="bi bi-megaphone-fill me-1"></i> Anúncios
                                 </a>
                             </li>
@@ -29,9 +28,9 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'criar-veiculos' %}">
-    <i class="bi bi-plus-circle me-1"></i> Cadastrar Veículo
-</a>
+                                <a class="nav-link" href="{% url 'criar-veiculo' %}">
+                                    <i class="bi bi-plus-circle me-1"></i> Cadastrar Veículo
+                                </a>
                             </li>
                         {% endif %}
                     </ul>
@@ -60,18 +59,6 @@
             </div>
         </nav>
     </header>
-    {% block search_bar %}
-    <div class="container mt-3">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control rounded-pill" placeholder="Buscar veículos..." aria-label="Buscar veículos" aria-describedby="button-addon2">
-                  
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endblock %}
 
     <main class="flex-fill">
         {% block content %}
