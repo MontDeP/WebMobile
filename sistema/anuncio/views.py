@@ -12,7 +12,7 @@ class ListarAnuncio(LoginRequiredMixin, ListView):
     """
     model = Anuncio
     context_object_name = 'anuncios'
-    template_name = 'anuncio/listar.html'
+    template_name = 'anuncios/listar.html'
 
     def get_queryset(self, **kwargs):
         pesquisa = self.request.GET.get('pesquisa', None)
@@ -24,7 +24,7 @@ class ListarAnuncio(LoginRequiredMixin, ListView):
 class CriarAnuncio(LoginRequiredMixin, CreateView):
     model = Anuncio
     form_class = FormularioAnuncio
-    template_name = 'anuncio/novo.html'
+    template_name = 'anuncios/novo.html'
     success_url = reverse_lazy('listar-anuncios')
 
     def form_valid(self, form):
@@ -38,10 +38,10 @@ class EditarAnuncio(LoginRequiredMixin,UpdateView):
     """
     model = Anuncio
     form_class = FormularioAnuncio
-    template_name = 'anuncio/editar.html'
+    template_name = 'anuncios/editar.html'
     success_url = reverse_lazy('listar-anuncios')
         
 class ExcluirAnuncio(LoginRequiredMixin, DeleteView):
     model = Anuncio
-    template_name = 'anuncio/excluir.html' 
+    template_name = 'anuncios/excluir.html'
     success_url = reverse_lazy('listar-anuncios')
