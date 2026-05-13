@@ -21,7 +21,7 @@ class Login(View):
             #verificar se esta ativo
             if user.is_active:
                 login(request, user)
-                return redirect('/veiculo/listar-veiculo/')
+                return redirect("listar-veiculos")
             else:
                 return render(request, 'autenticacao.html', {"mensagem": "Usuario inativo"})
         return render (request, 'autenticacao.html', {"mensagem": "Usuario ou senha invalidos"})
