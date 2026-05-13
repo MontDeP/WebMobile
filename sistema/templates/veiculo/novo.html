@@ -1,36 +1,46 @@
 {% extends 'base.html' %}
-{%block titulo%} Cadastro de novos veiculos {%endblock%}
+{% block title %}Novo Veículo{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>Criar Novo Veículo</h2>
-    <form action="/veiculo/novo/" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="id_marca" class="form-label">Marca</label>
-            {{ form.marca }}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-5">
+
+            <div class="mb-4">
+                <h1 style="font-size:1.125rem; font-weight:600; letter-spacing:-0.02em; margin:0 0 0.25rem;">
+                    Novo Veículo
+                </h1>
+                <p style="font-size:0.8125rem; color:var(--muted); margin:0;">
+                    Preencha as informações do veículo
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-body p-4">
+                    <form action="{% url 'criar-veiculo' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label class="form-label">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}
+                                    <div style="font-size:0.75rem; color:#dc2626; margin-top:0.25rem;">
+                                        {{ field.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary">Salvar</button>
+                            <a href="{% url 'listar-veiculos' %}" class="btn btn-outline-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
         </div>
-        <div class="mb-3">
-            <label for="id_modelo" class="form-label">Modelo</label>
-            {{ form.modelo }}
-        </div>
-        <div class="mb-3">
-            <label for="id_ano" class="form-label">Ano</label>
-            {{ form.ano }}
-        </div>
-        <div class="mb-3">
-            <label for="id_cor" class="form-label">Cor</label>
-            {{ form.cor }}
-        </div>
-        <div class="mb-3">
-            <label for="id_combustivel" class="form-label">Combustível</label>
-            {{ form.combustivel}}
-        </div>
-        <div class="mb-3"> 
-            <label for="id_foto" class="form-label">Foto</label>
-            {{ form.foto}}
-        </div>
-        <button type="submit" class="btn btn-primary">Salvar</button>
-    </form>
+    </div>
 </div>
 {% endblock %}

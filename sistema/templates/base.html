@@ -7,64 +7,275 @@
     <title>{% block title %}Sistema{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent:       #3b5bdb;
+            --accent-hover: #2f4cc5;
+            --bg:           #f7f8fc;
+            --surface:      #ffffff;
+            --border:       #e4e4e7;
+            --text:         #111827;
+            --muted:        #6b7280;
+            --radius:       10px;
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            font-size: 0.9rem;
+        }
+
+        /* ── Navbar ── */
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            height: 56px;
+            display: flex;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .topbar .brand {
+            font-weight: 600;
+            font-size: 0.9375rem;
+            color: var(--text);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+        .topbar .nav-link {
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--muted);
+            padding: 0.35rem 0.7rem;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background 0.12s, color 0.12s;
+        }
+        .topbar .nav-link:hover {
+            color: var(--text);
+            background: #f3f4f6;
+        }
+        .topbar .divider {
+            width: 1px;
+            height: 20px;
+            background: var(--border);
+            margin: 0 0.5rem;
+        }
+        .topbar .user-btn {
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--muted);
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.3rem 0.75rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+            transition: border-color 0.12s, color 0.12s;
+        }
+        .topbar .user-btn:hover { color: var(--text); border-color: #c4c4c8; }
+
+        /* ── Dropdown ── */
+        .dropdown-menu {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            font-size: 0.8125rem;
+            padding: 0.3rem;
+            min-width: 160px;
+        }
+        .dropdown-item {
+            border-radius: 6px;
+            padding: 0.45rem 0.75rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+        .dropdown-item:hover { background: #f3f4f6; }
+        .dropdown-item.text-danger { color: #dc2626 !important; }
+        .dropdown-item.text-danger:hover { background: #fef2f2; }
+
+        /* ── Buttons ── */
+        .btn {
+            font-family: inherit;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            border-radius: 8px;
+            padding: 0.45rem 1rem;
+            transition: background 0.12s, border-color 0.12s, opacity 0.12s;
+        }
+        .btn-primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            border-color: var(--accent-hover);
+            color: #fff;
+        }
+        .btn-outline-secondary {
+            border-color: var(--border);
+            color: var(--muted);
+            background: transparent;
+        }
+        .btn-outline-secondary:hover {
+            background: #f3f4f6;
+            border-color: #c4c4c8;
+            color: var(--text);
+        }
+        .btn-danger { border-radius: 8px; }
+        .btn-sm { padding: 0.35rem 0.8rem; font-size: 0.8125rem; }
+
+        /* ── Cards ── */
+        .card {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: none;
+            background: var(--surface);
+            overflow: hidden;
+        }
+        .card-footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+        }
+
+        /* ── Forms ── */
+        .form-control, .form-select {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            padding: 0.55rem 0.875rem;
+            background: #fafafa;
+            color: var(--text);
+            box-shadow: none !important;
+            font-family: inherit;
+            transition: border-color 0.12s;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent);
+            background: var(--surface);
+        }
+        .form-label {
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 0.35rem;
+        }
+        .form-text { font-size: 0.75rem; color: var(--muted); }
+
+        /* ── Page header ── */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.75rem;
+        }
+        .page-header h1 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin: 0;
+        }
+
+        /* ── Search bar ── */
+        .search-wrap {
+            margin-bottom: 1.5rem;
+        }
+        .search-wrap .form-control {
+            max-width: 380px;
+        }
+        .input-group .btn { border-radius: 0 8px 8px 0 !important; }
+        .input-group .form-control { border-radius: 8px 0 0 8px !important; }
+
+        /* ── Vehicle card image placeholder ── */
+        .img-placeholder {
+            height: 180px;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d1d5db;
+            font-size: 2.5rem;
+        }
+        .card-img-top { height: 180px; object-fit: cover; }
+
+        /* ── Empty state ── */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 1rem;
+            color: var(--muted);
+        }
+        .empty-state i { font-size: 2.5rem; opacity: 0.25; display: block; margin-bottom: 0.75rem; }
+        .empty-state p { font-size: 0.875rem; margin-bottom: 1rem; }
+
+        /* ── Danger outline button (custom) ── */
+        .btn-outline-danger-soft {
+            border: 1px solid #fca5a5;
+            color: #dc2626;
+            background: transparent;
+            border-radius: 8px;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            padding: 0.35rem 0.8rem;
+        }
+        .btn-outline-danger-soft:hover { background: #fef2f2; border-color: #f87171; color: #b91c1c; }
+    </style>
+    {% block extra_head %}{% endblock %}
 </head>
-<body class="bg-light d-flex flex-column min-vh-100">
+<body>
 
-    <header>
-        <nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/">Sistema</a>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        {% if user.is_authenticated %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'listar-anuncios' %}">
-                                    <i class="bi bi-megaphone-fill me-1"></i> Anúncios
-                                </a>
+<header>
+    <nav class="topbar">
+        <div class="container d-flex align-items-center gap-2">
+            <a class="brand me-3" href="/">Sistema</a>
+
+            {% if user.is_authenticated %}
+                <a class="nav-link" href="{% url 'listar-anuncios' %}">
+                    <i class="bi bi-megaphone me-1"></i>Anúncios
+                </a>
+                <a class="nav-link" href="{% url 'listar-veiculos' %}">
+                    <i class="bi bi-car-front me-1"></i>Veículos
+                </a>
+            {% endif %}
+
+            <div class="ms-auto d-flex align-items-center gap-2">
+                {% if user.is_authenticated %}
+                    <div class="dropdown">
+                        <a class="user-btn dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle"></i>
+                            {{ user.get_full_name|default:user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <form method="post" action="{% url 'logout' %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item text-danger">
+                                        <i class="bi bi-box-arrow-right me-2"></i>Sair
+                                    </button>
+                                </form>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'listar-veiculos' %}">
-                                    <i class="bi bi-car-front-fill me-1"></i> Meus Veículos
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'criar-veiculo' %}">
-                                    <i class="bi bi-plus-circle me-1"></i> Cadastrar Veículo
-                                </a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                    <div class="navbar-nav">
-                        {% if user.is_authenticated %}
-                            <div class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-circle me-1"></i>
-                                    {{ user.get_full_name|default:user.username }}
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li>
-                                        <a class="dropdown-item text-danger" href="/">
-                                            <i class="bi bi-box-arrow-right me-2"></i> Sair
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        {% else %}
-                            <a class="nav-link" href="{% url 'login' %}">
-                                <i class="bi bi-box-arrow-in-right me-1"></i> Entrar
-                            </a>
-                        {% endif %}
+                        </ul>
                     </div>
-                </div>
+                {% else %}
+                    <a class="nav-link" href="{% url 'login' %}">Entrar</a>
+                {% endif %}
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
+</header>
 
-    <main class="flex-fill">
-        {% block content %}
-        {% endblock %}
-    </main>
+<main>
+    {% block content %}{% endblock %}
+</main>
 
-    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>

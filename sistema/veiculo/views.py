@@ -27,7 +27,7 @@ class CriarVeiculos(LoginRequiredMixin, CreateView):
     template_name = 'veiculo/novo.html'
     success_url = reverse_lazy('listar-veiculos')
     
-class EditarVeiculos(UpdateView):
+class EditarVeiculos(LoginRequiredMixin, UpdateView):
     model = Veiculo
     form_class = FormularioVeiculo
     template_name = 'veiculo/editar.html'
@@ -37,7 +37,7 @@ class FotoVeiculo(ListView):
 
     def get(self, request, arquivo):
         try:
-            veiculo = Veiculo.objects.get(foto='veiculo/fotos/{}'.format(arquivo))
+            veiculo = Veiculo.objects.get(foto=arquivo)
             return FileResponse(veiculo.foto)
         except Veiculo.DoesNotExist:
             raise Http404("Foto não encontrada ou acesso não autorizado")

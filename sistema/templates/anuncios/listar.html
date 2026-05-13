@@ -1,65 +1,84 @@
 {% extends 'base.html' %}
+{% block title %}Anúncios{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    {% block search_bar %}
-    <div class="container mt-3">
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-10"> 
-                <form action="{% url 'listar-anuncios' %}" method="GET" novalidate>
-                    <div class="input-group mb-3">
-                        <input type="text" 
-                               name="pesquisa" 
-                               class="form-control rounded-pill shadow-sm" 
-                               placeholder="Buscar anuncio pelo modelo ou marca..." 
-                               value="{{ request.GET.pesquisa|default:'' }}"
-                               style="padding-left: 20px;"> 
-                        <button class="btn btn-secondary rounded-pill ms-2 px-4" type="submit">
-                            <i class="bi bi-search"></i> Buscar
-                        </button>
-                        <div class="col-md-3 col-lg-2 mt-md-0 mt-2 text-end">
-                            <a href="{% url 'criar-anuncio' %}" class="btn btn-success rounded-pill px-4 shadow-sm w-100">
-                                <i class="bi bi-plus-lg"></i> Novo
-                            </a>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+<div class="container py-5">
+
+    <div class="page-header">
+        <h1>Anúncios</h1>
+        <a href="{% url 'criar-anuncio' %}" class="btn btn-primary">
+            <i class="bi bi-plus me-1"></i>Novo anúncio
+        </a>
     </div>
-    {% endblock %}
 
-    <div class="row">
+    <div class="search-wrap">
+        <form action="{% url 'listar-anuncios' %}" method="GET">
+            <div class="input-group" style="max-width:380px;">
+                <input type="text"
+                       name="pesquisa"
+                       class="form-control"
+                       placeholder="Buscar por título..."
+                       value="{{ request.GET.pesquisa|default:'' }}">
+                <button class="btn btn-primary" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="row g-3">
         {% for anuncio in anuncios %}
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
+            <div class="col-sm-6 col-lg-4">
+                <div class="card h-100">
                     {% if anuncio.veiculo.foto %}
-                        <img src="{% url 'foto-veiculo' arquivo=anuncio.veiculo.foto.name %}" class="card-img-top" alt="{{ anuncio.veiculo.modelo }}" style="height: 200px; object-fit: cover;">
+                        <img src="{% url 'foto-veiculo' arquivo=anuncio.veiculo.foto.name %}"
+                             class="card-img-top"
+                             alt="{{ anuncio.veiculo.modelo }}">
                     {% else %}
-                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-                            <span class="text-muted small">Sem imagem disponível</span>
+                        <div class="img-placeholder">
+                            <i class="bi bi-car-front"></i>
                         </div>
-                    {% endif %} <div class="card-body">
-                        <h5 class="card-title">{{ anuncio.veiculo.get_marca_display }} {{ anuncio.veiculo.modelo }}</h5>
-                        <p class="card-text text-muted mb-0">
-                            {{ anuncio.veiculo.ano }} • {{ anuncio.veiculo.get_cor_display }} • {{ anuncio.veiculo.get_combustivel_display }}
+                    {% endif %}
+
+                    <div class="card-body py-3">
+                        <p class="mb-1" style="font-size:0.75rem; color:var(--muted); font-weight:500;">
+                            {{ anuncio.veiculo.get_marca_display }} &bull; {{ anuncio.veiculo.ano }}
                         </p>
-                        <p class="mt-2 fw-bold text-primary">R$ {{ anuncio.preco }}</p>
+                        <h6 class="mb-1" style="font-size:0.9375rem; font-weight:600; letter-spacing:-0.01em;">
+                            {{ anuncio.titulo }}
+                        </h6>
+                        <p class="mb-2" style="font-size:0.8125rem; color:var(--muted);">
+                            {{ anuncio.veiculo.get_cor_display }} &bull; {{ anuncio.veiculo.get_combustivel_display }}
+                        </p>
+                        <p class="mb-0" style="font-size:0.9375rem; font-weight:600; color:var(--accent);">
+                            R$ {{ anuncio.valor }}
+                        </p>
                     </div>
 
-                    <div class="card-footer bg-white border-top-0 d-flex justify-content-between pb-3">
-                        <a href="{% url 'editar-anuncio' anuncio.pk %}" class="btn btn-outline-primary btn-sm px-3">
-                            <i class="bi bi-pencil"></i> Editar
+                    <div class="card-footer d-flex gap-2 py-3">
+                        <a href="{% url 'editar-anuncio' anuncio.pk %}"
+                           class="btn btn-outline-secondary btn-sm flex-fill">
+                            <i class="bi bi-pencil me-1"></i>Editar
                         </a>
-                        <a href="{% url 'excluir-anuncio' anuncio.pk %}" class="btn btn-outline-danger btn-sm px-3">
-                            <i class="bi bi-trash"></i> Excluir
+                        <a href="{% url 'excluir-anuncio' anuncio.pk %}"
+                           class="btn-outline-danger-soft btn-sm flex-fill text-center">
+                            <i class="bi bi-trash me-1"></i>Excluir
                         </a>
                     </div>
                 </div>
             </div>
         {% empty %}
-            <p class="text-center w-100 mt-5">Nenhum anúncio encontrado.</p>
+            <div class="col-12">
+                <div class="empty-state">
+                    <i class="bi bi-megaphone"></i>
+                    <p>Nenhum anúncio publicado ainda.</p>
+                    <a href="{% url 'criar-anuncio' %}" class="btn btn-primary btn-sm">
+                        Publicar anúncio
+                    </a>
+                </div>
+            </div>
         {% endfor %}
     </div>
+
 </div>
 {% endblock %}

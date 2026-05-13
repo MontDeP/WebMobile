@@ -9,8 +9,11 @@ class Login(View):
     """
 
     def get(self, request):
-        context = {}
-        return render(request, 'autenticacao.html', context)
+        context = {'mensagem': ''}
+        if request.user.is_authenticated:
+            return redirect("listar-veiculos")
+        else:
+            return render(request, 'autenticacao.html', context)
     
     def post(self, request):
         usuario = request.POST.get('usuario', None)

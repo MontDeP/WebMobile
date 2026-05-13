@@ -18,7 +18,7 @@ class ListarAnuncio(LoginRequiredMixin, ListView):
         pesquisa = self.request.GET.get('pesquisa', None)
         queryset = Anuncio.objects.all()
         if pesquisa is not None:
-            queryset = queryset.filter(modelo__icontains=pesquisa)
+            queryset = queryset.filter(titulo__icontains=pesquisa)
         return queryset
 
 class CriarAnuncio(LoginRequiredMixin, CreateView):
